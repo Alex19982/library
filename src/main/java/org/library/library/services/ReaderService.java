@@ -30,11 +30,7 @@ public class ReaderService {
 
     public void updateReader(Integer id, Reader reader) {
         Reader entity=getById(id);
-        entity.setEmail(reader.getEmail());
-        entity.setPhone(reader.getPhone());
-        entity.setFirstName(reader.getFirstName());
-        entity.setLastName(reader.getLastName());
-        entity.setRegistrationDate(reader.getRegistrationDate());
+        entity.update(reader);
         readerRepository.save(entity);
     }
 

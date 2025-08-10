@@ -16,19 +16,7 @@ Content-Type: application/json
   "totalCopies": 88,
   "availableCopies":6
 }
-###
-POST http://localhost:8080/api/v1/books
-Content-Type: application/json
 
-
-{
-  "title": "кал",
-  "author": "Пидорас" ,
-  "isbn": 54,
-  "publicationYear":1984,
-  "totalCopies": 88,
-  "availableCopies":6
-  }
 ###
 PUT http://localhost:8080/api/v1/Books/1
 Content-Type: application/json
@@ -48,7 +36,7 @@ Content-Type: application/json
 {
  "firstName": "Daun",
   "lastName": "pedik",
-  "email": "pidoras",
+  "email": "pidoras@mail.ru",
   "phone": "12321312421"
 }
 ###
@@ -60,15 +48,15 @@ Content-Type: application/json
 {
   "bookId":1 ,
   "readerId": 1,
-  "dueDate": "2026-10-15",
-  "status": "Выдано"
+  "dueDate": "2026-10-15"
+
 }
 ###
 GET http://localhost:8080/api/v1/loans/get
 ###
-PUT http://localhost:8080/api/v1/loans/return/3
+PUT http://localhost:8080/api/v1/loans/return/1
 ###
-PUT http://localhost:8080/api/v1/loans/overdue/1
+PUT http://localhost:8080/api/v1/loans/overdue/2
 ###
 GET http://localhost:8080/api/v1/loans/reader/1
 ###

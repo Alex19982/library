@@ -1,25 +1,22 @@
 package org.library.library.controllers;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.library.library.entites.BookLoans;
 import org.library.library.entites.Reader;
 import org.library.library.services.BookLoansService;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
 import java.util.List;
 
+
+@AllArgsConstructor
 @RestController
 @RequestMapping("api/v1/loans")
 public class BookLoansController {
     BookLoansService bookLoansService;
 
-    public BookLoansController(BookLoansService bookLoansService) {
-        this.bookLoansService = bookLoansService;
-    }
-
     @PostMapping
-    public String bookLoans(@Valid @RequestBody BookLoans bookLoans) {
+    public String getBook(@Valid @RequestBody BookLoans bookLoans) {
         bookLoansService.loanBook(bookLoans);
         return "Дата возврата "+bookLoans.getDueDate();
     }
@@ -45,6 +42,6 @@ public class BookLoansController {
     }
     @PutMapping("overdue/{id}")
     public void overdueBook(@PathVariable Integer id) {
-        bookLoansService.overdueBook(id);
+        bookLoansService.expiredBook(id);
     }
 }

@@ -11,4 +11,6 @@ public interface BookRepository extends JpaRepository<Book,Integer> {
 
 
     List<Book> getBooksByPublicationYear(Integer publicationYear);
+
+    Book getBooksByIsbn(String isbn);
 }

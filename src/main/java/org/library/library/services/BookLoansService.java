@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class BookLoansService {
@@ -25,6 +24,7 @@ public class BookLoansService {
 
     public void loanBook(BookLoans bookLoans) {
         bookLoans.setLoanDate(LocalDate.now());
+        bookLoans.getBook();
         loanRepository.save(bookLoans);
        var entity2=bookRepository.findById(bookLoans.getBookId()).get();
        entity2.issueBook();
@@ -38,7 +38,7 @@ public class BookLoansService {
 
     public void returnBook(Integer id) {
         var loan = loanRepository.findById(id).get();
-        loan.setStatus("Возвращено");
+       loan.returnBook();
         loan.setReturnDate(LocalDate.now());
         loanRepository.save(loan);
         var book=bookRepository.findById(loan.getBookId()).get();
@@ -59,9 +59,9 @@ public class BookLoansService {
         return getOverdueLoans().stream().map(BookLoans::getReaderId).map(x->readerRepository.findById(x).get()).toList();
     }
 
-    public void overdueBook(Integer id) {
+    public void expiredBook(Integer id) {
         var loan = loanRepository.findById(id).get();
-        loan.setStatus("Просрочено");
+        loan.expiredBook();
         loan.setReturnDate(LocalDate.now());
         loanRepository.save(loan);
         var book=bookRepository.findById(loan.getBookId()).get();

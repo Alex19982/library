@@ -27,12 +27,7 @@ public class BookService {
 
     public void updateBook(Integer id, Book book) {
         Book entity=getById(id);
-        entity.setTitle(book.getTitle());
-        entity.setAuthor(book.getAuthor());
-        entity.setIsbn(book.getIsbn());
-        entity.setAvailableCopies(book.getAvailableCopies());
-        entity.setPublicationYear(book.getPublicationYear());
-        entity.setTotalCopies(book.getTotalCopies());
+        entity.updateBook(book);
         bookRepository.save(entity);
     }
 
@@ -46,5 +41,9 @@ public class BookService {
 
     public List<Book> getBooksByYear(Integer year) {
         return bookRepository.getBooksByPublicationYear(year);
+    }
+    public boolean containsIsbn(String isbn) {
+
+        return true;
     }
 }

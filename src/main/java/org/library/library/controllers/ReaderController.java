@@ -1,22 +1,19 @@
 package org.library.library.controllers;
-
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.library.library.entites.Reader;
-import org.library.library.repositories.ReaderRepository;
 import org.library.library.services.ReaderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
+
+
+@AllArgsConstructor
 @RestController
 @RequestMapping("/api/v1/readers")
 public class ReaderController {
     private final ReaderService readerService;
 
-    public ReaderController(ReaderService readerService) {
-        this.readerService = readerService;
-    }
     @GetMapping
     public List<Reader> getAllReaders() {
         return readerService.getAllReaders();

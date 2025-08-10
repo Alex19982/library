@@ -1,20 +1,18 @@
 package org.library.library.controllers;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.library.library.services.BookService;
 import org.library.library.entites.Book;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@AllArgsConstructor
 @RestController
 @RequestMapping("api/v1/books")
 public class BookController {
     BookService bookService;
 
-    public BookController(BookService bookService) {
-        this.bookService = bookService;
-    }
 
     @GetMapping
     public List<Book> getBooks() {
