@@ -3,7 +3,7 @@ GET http://localhost:8080/api/v1/books
 ###
 GET http://localhost:8080/api/v1/books/1
 ###
-GET http://localhost:8080/api/v1/Books/search?title=9 лет я сосал залупы&author=Даун ебаный
+GET http://localhost:8080/api/v1/books/search?title=9 лет я сосал залупы&author=Даун ебаный
 ###
 POST http://localhost:8080/api/v1/books
 Content-Type: application/json
