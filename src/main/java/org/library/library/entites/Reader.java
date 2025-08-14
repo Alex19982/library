@@ -1,9 +1,6 @@
 package org.library.library.entites;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.PastOrPresent;
@@ -25,17 +22,11 @@ public class Reader {
     private String firstName;
     @NotEmpty
     private String lastName;
+    @Column(unique = true)
     @Email
     private String email;
     private String phone;
     @PastOrPresent
     private LocalDate registrationDate;
 
-    public void update(Reader reader) {
-        this.firstName = reader.firstName;
-        this.lastName = reader.lastName;
-        this.email = reader.email;
-        this.phone = reader.phone;
-        this.registrationDate = reader.registrationDate;
-    }
 }

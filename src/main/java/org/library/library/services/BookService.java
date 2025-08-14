@@ -1,6 +1,9 @@
 package org.library.library.services;
 
+import org.library.library.dto.BookDto;
 import org.library.library.entites.Book;
+import org.library.library.exepcion.ResourceNotFoundException;
+import org.library.library.mappers.BookMapper;
 import org.library.library.repositories.BookRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,17 +20,19 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public void addBook(Book book) {
-        bookRepository.save(book);
+    public void addBook(BookDto book) {
+        var bookEntity = new Book();
+        BookMapper.map(book, bookEntity);
+        bookRepository.save(bookEntity);
     }
 
     public Book getById(Integer id) {
-        return bookRepository.findById(id).orElseThrow(()-> new IllegalStateException(id+" not found"));
+        return bookRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Книги с id "+id+" не существует"));
     }
 
-    public void updateBook(Integer id, Book book) {
+    public void updateBook(Integer id, BookDto book) {
         Book entity=getById(id);
-        entity.updateBook(book);
+        BookMapper.map(book,entity);
         bookRepository.save(entity);
     }
 
@@ -40,10 +45,11 @@ public class BookService {
     }
 
     public List<Book> getBooksByYear(Integer year) {
+        var entity=bookRepository.getBooksByPublicationYear(year);
+        if(entity.isEmpty()){
+            throw new ResourceNotFoundException("Книг с годом " + year+" не существует");
+        }
         return bookRepository.getBooksByPublicationYear(year);
     }
-    public boolean containsIsbn(String isbn) {
 
-        return true;
-    }
 }

@@ -9,23 +9,23 @@ POST http://localhost:8080/api/v1/books
 Content-Type: application/json
 
 {
-  "title": "Я даун",
-  "author": "пидорас",
+  "title": "",
+  "author": "",
   "isbn": "ISBN 978-5-43789-231-2",
   "publicationYear":1984,
   "totalCopies": 88,
-  "availableCopies":6
+  "availableCopies":0
 }
 
 ###
-PUT http://localhost:8080/api/v1/Books/1
+PUT http://localhost:8080/api/v1/books/1
 Content-Type: application/json
 
 {
-  "title": "Я даун",
-  "author": "пидорас" ,
-  "isbn": 54,
-  "publicationYear":1984,
+  "title": "",
+  "author": "" ,
+  "isbn": "ISBN 978-5-43789-231-2",
+  "publicationYear":2012,
   "totalCopies": 88,
   "availableCopies":6
 }
@@ -34,13 +34,13 @@ POST http://localhost:8080/api/v1/readers
 Content-Type: application/json
 
 {
- "firstName": "Daun",
-  "lastName": "pedik",
-  "email": "pidoras@mail.ru",
-  "phone": "12321312421"
+ "firstName": "",
+  "lastName": "",
+  "email": "",
+  "phone": ""
 }
 ###
-GET http://localhost:8080/api/v1/Readers/1
+GET http://localhost:8080/api/v1/readers/1
 ###
 POST http://localhost:8080/api/v1/loans
 Content-Type: application/json
@@ -65,3 +65,7 @@ GET http://localhost:8080/api/v1/loans/overdue
 GET http://localhost:8080/api/v1/loans/overdue/list
 ###
 GET http://localhost:8080/api/v1/books/search/1984
+###
+GET http://localhost:8080/api/v1/books/retryable-operation?param1=param1&param2=param2
+###
+GET http://localhost:8080/actuator/heapdump

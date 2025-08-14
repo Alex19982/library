@@ -8,11 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.ISBN;
-import org.hibernate.validator.constraints.UniqueElements;
-import org.library.library.validation.Uniq;
 
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Entity
 @AllArgsConstructor
@@ -28,7 +24,7 @@ public class Book {
     private String author;
     @NotEmpty
     @ISBN
-    @Uniq
+    @Column(unique = true)
     private String isbn;
     @NotNull
     private Integer publicationYear;
@@ -43,14 +39,6 @@ public class Book {
     }
     public void returnBook(){
         availableCopies++;
-    }
-    public void updateBook(Book book){
-        this.title = book.getTitle();
-        this.author = book.getAuthor();
-        this.isbn = book.getIsbn();
-        this.publicationYear = book.getPublicationYear();
-        this.totalCopies = book.getTotalCopies();
-        this.availableCopies = book.getAvailableCopies();
     }
 
 }
