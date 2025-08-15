@@ -5,11 +5,12 @@ import org.library.library.entites.Book;
 import org.library.library.exepcion.ResourceNotFoundException;
 import org.library.library.mappers.BookMapper;
 import org.library.library.repositories.BookRepository;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+@Component
 public class BookService {
     private final BookRepository bookRepository;
 

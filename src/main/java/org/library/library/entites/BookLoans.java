@@ -16,10 +16,14 @@ public class BookLoans {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @OneToOne
+    @JoinColumn(name = "BOOK_ID",referencedColumnName = "ID")
     @NotNull
-    private Integer bookId;
+    private Book book;
+    @OneToOne
+    @JoinColumn(name="Reader_id",referencedColumnName = "ID")
     @NotNull
-    private Integer readerId;
+    private Reader reader;
     @PastOrPresent
     private LocalDate loanDate;
     @Future
@@ -29,7 +33,7 @@ public class BookLoans {
     private LocalDate returnDate;
     private String status;
 
-    public void getBook(){
+    public void giveBook(){
         status="Выдано";
     }
     public void returnBook(){

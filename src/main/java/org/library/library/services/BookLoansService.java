@@ -26,18 +26,19 @@ public class BookLoansService {
         this.readerRepository = readerRepository;
     }
 
-    public void loanBook(BookLoanDto bookLoans) {
-        if(bookRepository.findById(bookLoans.bookId()).orElseThrow().getAvailableCopies()==0){
+    public void loanBook(BookLoanDto bookLoanDto) {
+        if (bookRepository.findById(bookLoanDto.bookId()).orElseThrow().getAvailableCopies() == 0) {
             throw new ConflictException("Все копии книги уже выданы");
         }
         var entity = new BookLoans();
-        BookLoanMapper.map(bookLoans, entity);
+        var book = bookRepository.findById(bookLoanDto.bookId()).orElseThrow(() -> new ResourceNotFoundException("Книги с id "
+                +bookLoanDto.bookId()+" не существует"));
+        var reader = readerRepository.findById(bookLoanDto.readerId()).orElseThrow(() -> new ResourceNotFoundException("Читателя с id "
+                +bookLoanDto.readerId()+" не существует"));
+        BookLoanMapper.map(bookLoanDto, entity, book,reader);
         entity.setLoanDate(LocalDate.now());
-        entity.getBook();
+        entity.getBook().issueBook();
         loanRepository.save(entity);
-       var entity2=bookRepository.findById(entity.getBookId()).orElseThrow(()-> new ResourceNotFoundException("Книги с id "+entity.getBookId()+" не существует"));
-       entity2.issueBook();
-       bookRepository.save(entity2);
     }
 
     public List<BookLoans> getAllLoans() {
@@ -46,40 +47,41 @@ public class BookLoansService {
 
 
     public void returnBook(Integer id) {
-        var loan = loanRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Долга с id "+id+" не существует"));
+        var loan = loanRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Долга с id " + id + " не существует"));
         loan.returnBook();
         loan.setReturnDate(LocalDate.now());
         loanRepository.save(loan);
-        var book=bookRepository.findById(loan.getBookId()).orElseThrow(()-> new ResourceNotFoundException("Книги с id "+loan.getBookId()+" не существует"));
+        var book = bookRepository.findById(loan.getBook().getId()).
+                orElseThrow(() -> new ResourceNotFoundException("Книги с id " + loan.getBook().getId() + " не существует"));
         book.returnBook();
         bookRepository.save(book);
 
     }
 
     public List<BookLoans> getAllReaderLoans(Integer readerId) {
-       return loanRepository.findAllByReaderId(readerId);
+        return loanRepository.findAllByReaderId(readerId);
     }
 
     public List<BookLoans> getOverdueLoans() {
-        return  loanRepository.findAllByStatus("Просрочено");
+        return loanRepository.findAllByStatus("Просрочено");
     }
 
     public List<Reader> getDebtors() {
-        return getOverdueLoans().stream().map(BookLoans::getReaderId).map(x->readerRepository.findById(x).
-                orElseThrow(()-> new ResourceNotFoundException("Книги нет"))).toList();
+        return getOverdueLoans().stream().map(BookLoans::getReader).toList();
     }
 
     public void expiredBook(Integer id) {
-        var loan = loanRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Долга с id "+id+" не существует"));
+        var loan = loanRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Долга с id " + id + " не существует"));
         loan.expiredBook();
         loan.setReturnDate(LocalDate.now());
         loanRepository.save(loan);
-        var book=bookRepository.findById(loan.getBookId()).orElseThrow(()-> new ResourceNotFoundException("Книги с id "+loan.getBookId()+" не существует"));
+        var book = bookRepository.findById(loan.getBook().getId()).
+                orElseThrow(() -> new ResourceNotFoundException("Книги с id " + loan.getBook().getId() + " не существует"));
         book.returnBook();
         bookRepository.save(book);
     }
 
     public BookLoans getById(Integer id) {
-        return loanRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Долга с id "+id+" не существует"));
+        return loanRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Долга с id " + id + " не существует"));
     }
 }
