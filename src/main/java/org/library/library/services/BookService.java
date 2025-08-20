@@ -22,7 +22,7 @@ public class BookService { //Автовыравнивание кода
         return bookRepository.findAll();
     }
 
-    @Transactional
+
     public void addBook(BookDto dto) {
         Book entity = bookMapper.toEntity(dto);
         bookRepository.save(entity);
