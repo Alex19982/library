@@ -29,13 +29,13 @@ public class BookService { //Автовыравнивание кода
     }
 
     public Book getById(Integer id) {
-        return bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Книги с id " + id + " не существует")); //formatted()
+        return bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("%s Not found".formatted(id))); //formatted()
     }
 
     @Transactional
     public void updateBook(Integer id, BookDto dto) {
         Book entity = bookRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Книги с id " + id + " не существует"));
+                .orElseThrow(() -> new ResourceNotFoundException("%s Not found".formatted(id)));
         bookMapper.updateFromDto(dto, entity);
         bookRepository.save(entity);
     }
@@ -51,7 +51,7 @@ public class BookService { //Автовыравнивание кода
     public List<Book> getBooksByYear(Integer year) {
         var books = bookRepository.getBooksByPublicationYear(year);
         if (books.isEmpty()) {
-            throw new ResourceNotFoundException("Книг с годом " + year + " не существует"); //formatted()
+            throw new ResourceNotFoundException("%s Not found".formatted(year)); //formatted()
         }
         return bookRepository.getBooksByPublicationYear(year);
     }

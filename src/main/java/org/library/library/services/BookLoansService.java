@@ -28,12 +28,12 @@ public class BookLoansService { //Автовыравнивание кода
     @Transactional
     public void loanBook(BookLoanDto dto) {
         Book book = bookRepository.findById(dto.bookId())
-                .orElseThrow(() -> new ResourceNotFoundException("Книги с id " + dto.bookId() + " не существует"));
+                .orElseThrow(() -> new ResourceNotFoundException("%s Not found".formatted(dto.bookId())));
         if (book.getAvailableCopies() <= 0) {
             throw new ConflictException("Все экземпляры книги уже выданы");
         }
         Reader reader = readerRepository.findById(dto.readerId())
-                .orElseThrow(() -> new ResourceNotFoundException("Читателя с id " + dto.readerId() + " не существует"));
+                .orElseThrow(() -> new ResourceNotFoundException("%s Not found".formatted(dto.readerId())));
         BookLoan loan = bookLoanMapper.toEntity(dto);
         loan.setBook(book);
         loan.setReader(reader);
@@ -51,12 +51,12 @@ public class BookLoansService { //Автовыравнивание кода
     //Что если мы сохранили loanRepository.save(loan); возврат книги, но упали на   bookRepository.save(book);
     //Данные будут неконсистентными. Долг возвращен, а книга не вернулась на полку. Как пофиксить?
     public void returnBook(Integer id) {
-        var loan = loanRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Долга с id " + id + " не существует")); //formatted()
+        var loan = loanRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("%s Not found".formatted(id))); //formatted()
         loan.returnBook();
         loan.setReturnDate(LocalDate.now());
         loanRepository.save(loan);
         var book = bookRepository.findById(loan.getBook().getId()).
-                orElseThrow(() -> new ResourceNotFoundException("Книги с id " + loan.getBook().getId() + " не существует")); //formatted()
+                orElseThrow(() -> new ResourceNotFoundException("%s Not found".formatted(id))); //formatted()
         book.returnBook();
         bookRepository.save(book);
 
@@ -79,17 +79,17 @@ public class BookLoansService { //Автовыравнивание кода
     //Аналогично. Как мы можем решить проблему, что лоан обновился, а на сохранении книги упали. Нарушится консистентность
     @Transactional
     public void expiredBook(Integer id) {
-        var loan = loanRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Долга с id " + id + " не существует")); //formatted()
+        var loan = loanRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("%s Not found".formatted(id))); //formatted()
         loan.expiredBook();
         loan.setReturnDate(LocalDate.now());
         loanRepository.save(loan);
         var book = bookRepository.findById(loan.getBook().getId()).
-                orElseThrow(() -> new ResourceNotFoundException("Книги с id " + loan.getBook().getId() + " не существует")); //formatted()
+                orElseThrow(() -> new ResourceNotFoundException("%s Not found".formatted(id))); //formatted()
         book.returnBook();
         bookRepository.save(book);
     }
 
     public BookLoan getById(Integer id) {
-        return loanRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Долга с id " + id + " не существует")); //formatted()
+        return loanRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("%s Not found".formatted(id))); //formatted()
     }
 }

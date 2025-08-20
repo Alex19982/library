@@ -23,7 +23,7 @@ public class ReaderService {
     }
 
     public Reader getById(Integer id) {
-        return readerRepository.findById(id).orElseThrow(() -> new IllegalStateException(id + "Not found")); //formatted()
+        return readerRepository.findById(id).orElseThrow(() -> new IllegalStateException("%s Not found".formatted(id))); //formatted()
     }
 
     @Transactional
