@@ -1,44 +1,47 @@
 package org.library.library.services;
 
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.library.library.dto.BookDto;
 import org.library.library.entites.Book;
-import org.library.library.exepcion.ResourceNotFoundException;
+import org.library.library.excepcion.ResourceNotFoundException;
 import org.library.library.mappers.BookMapper;
 import org.library.library.repositories.BookRepository;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Component
-public class BookService {
+@Service
+@RequiredArgsConstructor
+public class BookService { //Автовыравнивание кода
     private final BookRepository bookRepository;
+    private final BookMapper bookMapper;
 
-    public BookService(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
+
     public List<Book> getAllBooks() {
         return bookRepository.findAll();
     }
 
-    public void addBook(BookDto book) {
-        var bookEntity = new Book();
-        BookMapper.map(book, bookEntity);
-        bookRepository.save(bookEntity);
+    @Transactional
+    public void addBook(BookDto dto) {
+        Book entity = bookMapper.toEntity(dto);
+        bookRepository.save(entity);
     }
 
     public Book getById(Integer id) {
-        return bookRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Книги с id "+id+" не существует"));
+        return bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Книги с id " + id + " не существует")); //formatted()
     }
 
-    public void updateBook(Integer id, BookDto book) {
-        Book entity=getById(id);
-        BookMapper.map(book,entity);
+    @Transactional
+    public void updateBook(Integer id, BookDto dto) {
+        Book entity = bookRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Книги с id " + id + " не существует"));
+        bookMapper.updateFromDto(dto, entity);
         bookRepository.save(entity);
     }
 
     public List<Book> getByTitleAndAuthor(String title, String author) {
-        return bookRepository.getBooksByTitleAndAuthor(title,author);
+        return bookRepository.getBooksByTitleAndAuthor(title, author);
     }
 
     public void deleteById(Integer id) {
@@ -46,9 +49,9 @@ public class BookService {
     }
 
     public List<Book> getBooksByYear(Integer year) {
-        var entity=bookRepository.getBooksByPublicationYear(year);
-        if(entity.isEmpty()){
-            throw new ResourceNotFoundException("Книг с годом " + year+" не существует");
+        var books = bookRepository.getBooksByPublicationYear(year);
+        if (books.isEmpty()) {
+            throw new ResourceNotFoundException("Книг с годом " + year + " не существует"); //formatted()
         }
         return bookRepository.getBooksByPublicationYear(year);
     }

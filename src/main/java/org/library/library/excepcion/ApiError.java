@@ -1,4 +1,4 @@
-package org.library.library.exepcion;
+package org.library.library.excepcion; //Пакет неверно назван -> exception
 
 import java.time.ZonedDateTime;
 import java.util.List;

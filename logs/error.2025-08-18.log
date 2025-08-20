@@ -1,0 +1,1 @@
+2025-08-18 18:41:28 [http-nio-8080-exec-2] ERROR o.l.l.e.DefaultExceptionHandler - ApiError[message=Книг с годом -1984 не существует, status=404, path=/api/v1/books/search/-1984, timestamp=2025-08-18T18:41:28.382116200+03:00[Europe/Kiev], errors=[]]
